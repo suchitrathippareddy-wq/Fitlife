@@ -1,4 +1,3 @@
-import styles from "../components/styles/styles";
 import { ScrollView } from "react-native";
 import Header from "../components/Header";
 import WelcomeCard from "../components/WelcomeCard";
@@ -9,25 +8,36 @@ import Footer from "../components/Footer";
 
 export default function HomeScreen({ navigation }) {
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView>
+
       <Header />
 
       <WelcomeCard />
 
+      {/* Workout Section */}
+
       <WorkoutCard
-        title="Chest Workout"
+        title="Chest & Triceps"
         duration="45 Minutes"
+        calories="320"
+        difficulty="Intermediate"
       />
 
       <WorkoutCard
         title="Leg Workout"
         duration="60 Minutes"
+        calories="420"
+        difficulty="Advanced"
       />
 
       <WorkoutCard
         title="Yoga Session"
         duration="30 Minutes"
+        calories="180"
+        difficulty="Beginner"
       />
+
+      {/* Trainers */}
 
       <TrainerCard
         name="John"
@@ -39,12 +49,15 @@ export default function HomeScreen({ navigation }) {
         specialty="Yoga Trainer"
       />
 
+      {/* Progress */}
+
       <ProgressCard
         goal="Weight Loss"
         progress="70%"
       />
 
       <Footer />
+
     </ScrollView>
   );
 }
