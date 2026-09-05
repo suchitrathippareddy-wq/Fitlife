@@ -40,12 +40,8 @@ export default function RegistrationScreen({ navigation }) {
       return;
     }
 
-    Alert.alert("Success", "Registration Successful! 🎉", [
-      {
-        text: "Continue",
-        onPress: () => navigation.navigate("Login"),
-      },
-    ]);
+    // Registration successful → Login page
+    navigation.navigate("Login");
   };
 
   return (
@@ -96,7 +92,9 @@ export default function RegistrationScreen({ navigation }) {
         style={styles.button}
         onPress={handleRegister}
       >
-        <Text style={styles.buttonText}>CREATE ACCOUNT</Text>
+        <Text style={styles.buttonText}>
+          CREATE ACCOUNT
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity

@@ -14,7 +14,7 @@ export default function LoginScreen({ navigation }) {
 
   const handleLogin = () => {
     if (email.trim() === "" || password.trim() === "") {
-      Alert.alert("Error", "Please fill all fields");
+      Alert.alert("Error", "Please enter email and password");
       return;
     }
 
@@ -24,16 +24,15 @@ export default function LoginScreen({ navigation }) {
     }
 
     if (password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters");
+      Alert.alert(
+        "Error",
+        "Password must be at least 6 characters"
+      );
       return;
     }
 
-    Alert.alert("Success", "Login Successful! 🎉", [
-      {
-        text: "OK",
-        onPress: () => navigation.replace("Home"),
-      },
-    ]);
+    // Login successful
+    navigation.replace("Home");
   };
 
   return (
@@ -61,7 +60,7 @@ export default function LoginScreen({ navigation }) {
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
+        secureTextEntry={true}
       />
 
       <TouchableOpacity
@@ -92,7 +91,7 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    fontSize: 55,
+    fontSize: 50,
     textAlign: "center",
     marginBottom: 10,
   },
@@ -112,12 +111,12 @@ const styles = StyleSheet.create({
 
   input: {
     backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#DDDDDD",
     borderRadius: 12,
     padding: 15,
     marginBottom: 15,
     fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#DDDDDD",
   },
 
   button: {
