@@ -8,7 +8,7 @@ import {
 
 export default function WorkoutDetailsScreen({ route, navigation }) {
   const {
-    title = "Chest & Triceps",
+    title = "Chest Workout",
     duration = "45 Minutes",
     calories = "320",
     difficulty = "Intermediate",
@@ -25,16 +25,19 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
   return (
     <ScrollView style={styles.container}>
 
+      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.back}>← Back</Text>
         </TouchableOpacity>
 
-        <Text style={styles.headerTitle}>Workout Details</Text>
+        <Text style={styles.headerTitle}>
+          Workout Details
+        </Text>
       </View>
 
+      {/* Workout Information */}
       <View style={styles.card}>
-
         <Text style={styles.title}>{title}</Text>
 
         <View style={styles.infoRow}>
@@ -45,28 +48,41 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
         <Text style={styles.difficulty}>
           📈 Difficulty: {difficulty}
         </Text>
-
       </View>
 
-      <Text style={styles.sectionTitle}>Exercises</Text>
+      {/* Exercises */}
+      <Text style={styles.sectionTitle}>
+        Exercises
+      </Text>
 
       {exercises.map((exercise, index) => (
         <View style={styles.exercise} key={index}>
+
           <View style={styles.number}>
-            <Text style={styles.numberText}>{index + 1}</Text>
+            <Text style={styles.numberText}>
+              {index + 1}
+            </Text>
           </View>
 
-          <Text style={styles.exerciseName}>{exercise}</Text>
+          <Text style={styles.exerciseName}>
+            {exercise}
+          </Text>
 
           <Text style={styles.arrow}>›</Text>
+
         </View>
       ))}
 
+      {/* Start Button */}
       <TouchableOpacity
         style={styles.startButton}
-        onPress={() => alert("Workout Started! 💪🔥")}
+        onPress={() =>
+          alert(`${title} Started! 💪🔥`)
+        }
       >
-        <Text style={styles.startText}>START WORKOUT ▶</Text>
+        <Text style={styles.startText}>
+          START WORKOUT ▶
+        </Text>
       </TouchableOpacity>
 
     </ScrollView>

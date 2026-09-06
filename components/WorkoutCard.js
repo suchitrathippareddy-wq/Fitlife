@@ -1,34 +1,52 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 
 export default function WorkoutCard({
   title,
   duration,
   calories,
   difficulty,
+  navigation,
 }) {
   return (
     <View style={styles.card}>
 
-      {/* Workout Title */}
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>
+        {title}
+      </Text>
 
-      {/* Workout Information */}
       <View style={styles.infoRow}>
-        <Text style={styles.info}>⏱️ {duration}</Text>
-        <Text style={styles.info}>🔥 {calories} kcal</Text>
+        <Text style={styles.info}>
+          ⏱️ {duration}
+        </Text>
+
+        <Text style={styles.info}>
+          🔥 {calories} kcal
+        </Text>
       </View>
 
-      {/* Difficulty */}
       <Text style={styles.difficulty}>
         📈 {difficulty}
       </Text>
 
-      {/* Start Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => alert(`${title} started! 💪`)}
+        onPress={() =>
+          navigation.navigate("WorkoutDetails", {
+            title: title,
+            duration: duration,
+            calories: calories,
+            difficulty: difficulty,
+          })
+        }
       >
-        <Text style={styles.buttonText}>START WORKOUT ▶</Text>
+        <Text style={styles.buttonText}>
+          START WORKOUT ▶
+        </Text>
       </TouchableOpacity>
 
     </View>
@@ -42,7 +60,6 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     padding: 18,
     borderRadius: 16,
-
     elevation: 4,
     shadowOpacity: 0.15,
     shadowRadius: 5,
