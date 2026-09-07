@@ -8,18 +8,18 @@ import {
 
 export default function WorkoutDetailsScreen({ route, navigation }) {
   const {
-    title = "Chest Workout",
+    title = "Full Body Workout",
     duration = "45 Minutes",
-    calories = "320",
+    calories = "350",
     difficulty = "Intermediate",
   } = route?.params || {};
 
   const exercises = [
     "Push Ups",
-    "Bench Press",
-    "Incline Dumbbell Press",
-    "Tricep Dips",
-    "Cable Pushdown",
+    "Squats",
+    "Lunges",
+    "Glute Bridge",
+    "Plank",
   ];
 
   return (
@@ -27,27 +27,42 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
 
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+        >
           <Text style={styles.back}>← Back</Text>
         </TouchableOpacity>
 
         <Text style={styles.headerTitle}>
           Workout Details
         </Text>
+
       </View>
 
-      {/* Workout Information */}
+      {/* Workout Details */}
       <View style={styles.card}>
-        <Text style={styles.title}>{title}</Text>
+
+        <Text style={styles.title}>
+          {title}
+        </Text>
 
         <View style={styles.infoRow}>
-          <Text style={styles.info}>⏱️ {duration}</Text>
-          <Text style={styles.info}>🔥 {calories} kcal</Text>
+
+          <Text style={styles.info}>
+            ⏱️ {duration}
+          </Text>
+
+          <Text style={styles.info}>
+            🔥 {calories} kcal
+          </Text>
+
         </View>
 
         <Text style={styles.difficulty}>
           📈 Difficulty: {difficulty}
         </Text>
+
       </View>
 
       {/* Exercises */}
@@ -56,7 +71,10 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
       </Text>
 
       {exercises.map((exercise, index) => (
-        <View style={styles.exercise} key={index}>
+        <View
+          style={styles.exercise}
+          key={index}
+        >
 
           <View style={styles.number}>
             <Text style={styles.numberText}>
@@ -68,16 +86,20 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
             {exercise}
           </Text>
 
-          <Text style={styles.arrow}>›</Text>
+          <Text style={styles.arrow}>
+            ›
+          </Text>
 
         </View>
       ))}
 
-      {/* Start Button */}
+      {/* START WORKOUT */}
       <TouchableOpacity
         style={styles.startButton}
         onPress={() =>
-          alert(`${title} Started! 💪🔥`)
+          navigation.navigate("Workout", {
+            title: title,
+          })
         }
       >
         <Text style={styles.startText}>
@@ -90,6 +112,7 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
@@ -200,4 +223,5 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
   },
+
 });
