@@ -1,44 +1,58 @@
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+} from "react-native";
 
-export default function ProgressCard({ goal, progress }) {
+export default function ProgressCard() {
+
   return (
     <View style={styles.card}>
 
-      <Text style={styles.heading}>📊 Today's Progress</Text>
+      <Text style={styles.title}>
+        📊 My Progress
+      </Text>
 
-      <Text style={styles.goal}>{goal}</Text>
+      <Text style={styles.goal}>
+        🎯 Goal: Weight Loss
+      </Text>
 
-      <View style={styles.progressRow}>
-        <Text style={styles.progressText}>Your Progress</Text>
-        <Text style={styles.percentage}>{progress}</Text>
+      <View style={styles.row}>
+        <Text style={styles.label}>
+          🏋️ Workouts Completed
+        </Text>
+
+        <Text style={styles.value}>
+          0
+        </Text>
       </View>
 
-      {/* Progress Bar */}
+      <View style={styles.row}>
+        <Text style={styles.label}>
+          🔥 Calories Burned
+        </Text>
+
+        <Text style={styles.value}>
+          0 kcal
+        </Text>
+      </View>
+
+      <View style={styles.row}>
+        <Text style={styles.label}>
+          ⏱️ Total Workout Time
+        </Text>
+
+        <Text style={styles.value}>
+          0 min
+        </Text>
+      </View>
+
+      <Text style={styles.progressText}>
+        Progress: 0%
+      </Text>
+
       <View style={styles.progressBackground}>
-        <View style={styles.progressFill} />
-      </View>
-
-      {/* Statistics */}
-      <View style={styles.statsRow}>
-
-        <View style={styles.stat}>
-          <Text style={styles.icon}>🔥</Text>
-          <Text style={styles.value}>420</Text>
-          <Text style={styles.label}>Calories</Text>
-        </View>
-
-        <View style={styles.stat}>
-          <Text style={styles.icon}>⏱️</Text>
-          <Text style={styles.value}>38</Text>
-          <Text style={styles.label}>Minutes</Text>
-        </View>
-
-        <View style={styles.stat}>
-          <Text style={styles.icon}>🏋️</Text>
-          <Text style={styles.value}>4</Text>
-          <Text style={styles.label}>Workouts</Text>
-        </View>
-
+        <View style={styles.progressBar} />
       </View>
 
     </View>
@@ -46,82 +60,62 @@ export default function ProgressCard({ goal, progress }) {
 }
 
 const styles = StyleSheet.create({
+
   card: {
     backgroundColor: "#FFFFFF",
     margin: 15,
     padding: 20,
     borderRadius: 18,
     elevation: 4,
-    shadowOpacity: 0.15,
-    shadowRadius: 5,
   },
 
-  heading: {
-    fontSize: 20,
+  title: {
+    fontSize: 21,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 15,
   },
 
   goal: {
-    fontSize: 15,
-    color: "#666666",
-    marginBottom: 18,
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 15,
   },
 
-  progressRow: {
+  row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8,
+    marginBottom: 12,
   },
 
-  progressText: {
+  label: {
     fontSize: 14,
     color: "#555555",
   },
 
-  percentage: {
+  value: {
     fontSize: 14,
     fontWeight: "bold",
   },
 
+  progressText: {
+    fontSize: 15,
+    fontWeight: "bold",
+    marginTop: 5,
+    marginBottom: 8,
+  },
+
   progressBackground: {
-    height: 10,
+    height: 12,
     backgroundColor: "#E0E0E0",
     borderRadius: 10,
     overflow: "hidden",
   },
 
-  progressFill: {
-    width: "70%",
-    height: "100%",
+  progressBar: {
+    height: 12,
+    width: "0%",
     backgroundColor: "#222222",
     borderRadius: 10,
   },
 
-  statsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 22,
-  },
-
-  stat: {
-    alignItems: "center",
-    flex: 1,
-  },
-
-  icon: {
-    fontSize: 22,
-    marginBottom: 5,
-  },
-
-  value: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-
-  label: {
-    fontSize: 12,
-    color: "#777777",
-    marginTop: 3,
-  },
 });

@@ -14,13 +14,45 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
     difficulty = "Intermediate",
   } = route?.params || {};
 
-  const exercises = [
-    "Push Ups",
-    "Squats",
-    "Lunges",
-    "Glute Bridge",
-    "Plank",
-  ];
+  // Workout-wise different exercises
+  const workoutExercises = {
+    "Full Body Workout": [
+      { name: "Push Ups", reps: "10 reps" },
+      { name: "Squats", reps: "15 reps" },
+      { name: "Lunges", reps: "10 each leg" },
+      { name: "Glute Bridge", reps: "15 reps" },
+      { name: "Plank", reps: "30 sec" },
+    ],
+
+    "Chest & Triceps": [
+      { name: "Bench Press", reps: "10 reps" },
+      { name: "Dumbbell Fly", reps: "12 reps" },
+      { name: "Tricep Dips", reps: "10 reps" },
+      { name: "Tricep Pushdown", reps: "12 reps" },
+      { name: "Diamond Push Ups", reps: "10 reps" },
+    ],
+
+    "Leg Workout": [
+      { name: "Barbell Squats", reps: "12 reps" },
+      { name: "Leg Press", reps: "15 reps" },
+      { name: "Leg Extension", reps: "12 reps" },
+      { name: "Hamstring Curl", reps: "12 reps" },
+      { name: "Calf Raises", reps: "20 reps" },
+    ],
+
+    "Yoga Session": [
+      { name: "Cat-Cow Stretch", reps: "30 sec" },
+      { name: "Downward Dog", reps: "30 sec" },
+      { name: "Cobra Pose", reps: "30 sec" },
+      { name: "Child's Pose", reps: "30 sec" },
+      { name: "Warrior Pose", reps: "30 sec" },
+    ],
+  };
+
+  // Selected workout ki exercises
+  const exercises =
+    workoutExercises[title] ||
+    workoutExercises["Full Body Workout"];
 
   return (
     <ScrollView style={styles.container}>
@@ -40,7 +72,7 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
 
       </View>
 
-      {/* Workout Details */}
+      {/* Workout Information */}
       <View style={styles.card}>
 
         <Text style={styles.title}>
@@ -71,40 +103,55 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
       </Text>
 
       {exercises.map((exercise, index) => (
+
         <View
           style={styles.exercise}
           key={index}
         >
 
           <View style={styles.number}>
+
             <Text style={styles.numberText}>
               {index + 1}
             </Text>
+
           </View>
 
-          <Text style={styles.exerciseName}>
-            {exercise}
-          </Text>
+          <View style={styles.exerciseInfo}>
+
+            <Text style={styles.exerciseName}>
+              {exercise.name}
+            </Text>
+
+            <Text style={styles.reps}>
+              {exercise.reps}
+            </Text>
+
+          </View>
 
           <Text style={styles.arrow}>
             ›
           </Text>
 
         </View>
+
       ))}
 
-      {/* START WORKOUT */}
+      {/* Start Workout */}
       <TouchableOpacity
         style={styles.startButton}
         onPress={() =>
           navigation.navigate("Workout", {
             title: title,
+            exercises: exercises,
           })
         }
       >
+
         <Text style={styles.startText}>
           START WORKOUT ▶
         </Text>
+
       </TouchableOpacity>
 
     </ScrollView>
@@ -198,11 +245,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  exerciseName: {
+  exerciseInfo: {
     flex: 1,
     marginLeft: 15,
+  },
+
+  exerciseName: {
     fontSize: 15,
     fontWeight: "600",
+  },
+
+  reps: {
+    fontSize: 13,
+    color: "#777777",
+    marginTop: 4,
   },
 
   arrow: {

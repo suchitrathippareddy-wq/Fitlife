@@ -10,26 +10,32 @@ export default function WorkoutScreen({ route, navigation }) {
 
   const {
     title = "Full Body Workout",
+    exercises = [
+      { name: "Push Ups", reps: "10 reps" },
+      { name: "Squats", reps: "15 reps" },
+      { name: "Lunges", reps: "10 each leg" },
+      { name: "Glute Bridge", reps: "15 reps" },
+      { name: "Plank", reps: "30 sec" },
+    ],
   } = route?.params || {};
-
-  const exercises = [
-    "Push Ups",
-    "Squats",
-    "Lunges",
-    "Glute Bridge",
-    "Plank",
-  ];
 
   const [currentExercise, setCurrentExercise] = useState(0);
 
   const nextExercise = () => {
+
     if (currentExercise < exercises.length - 1) {
+
       setCurrentExercise(currentExercise + 1);
+
     } else {
+
       alert("Workout Completed! 🎉💪");
-      navigation.goBack();
+
+      navigation.navigate("Home");
     }
   };
+
+  const exercise = exercises[currentExercise];
 
   return (
     <View style={styles.container}>
@@ -42,27 +48,27 @@ export default function WorkoutScreen({ route, navigation }) {
         Exercise {currentExercise + 1} / {exercises.length}
       </Text>
 
-      <View style={styles.exerciseCard}>
-
-        <Text style={styles.exerciseNumber}>
-          {currentExercise + 1}
-        </Text>
+      <View style={styles.card}>
 
         <Text style={styles.exerciseName}>
-          {exercises[currentExercise]}
+          {exercise.name}
+        </Text>
+
+        <Text style={styles.reps}>
+          {exercise.reps}
         </Text>
 
         <Text style={styles.instruction}>
-          Perform this exercise and then press NEXT.
+          Complete the exercise and press NEXT.
         </Text>
 
       </View>
 
       <TouchableOpacity
-        style={styles.nextButton}
+        style={styles.button}
         onPress={nextExercise}
       >
-        <Text style={styles.nextText}>
+        <Text style={styles.buttonText}>
           {currentExercise === exercises.length - 1
             ? "FINISH WORKOUT 🎉"
             : "NEXT EXERCISE ▶"}
@@ -78,8 +84,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    padding: 20,
     justifyContent: "center",
+    padding: 20,
   },
 
   title: {
@@ -96,7 +102,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
 
-  exerciseCard: {
+  card: {
     backgroundColor: "#FFFFFF",
     padding: 30,
     borderRadius: 20,
@@ -104,14 +110,15 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 
-  exerciseNumber: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 15,
-  },
-
   exerciseName: {
     fontSize: 30,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+
+  reps: {
+    fontSize: 24,
     fontWeight: "bold",
     marginBottom: 15,
   },
@@ -122,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-  nextButton: {
+  button: {
     backgroundColor: "#222222",
     padding: 17,
     borderRadius: 12,
@@ -130,7 +137,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
 
-  nextText: {
+  buttonText: {
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "bold",

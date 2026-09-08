@@ -9,20 +9,31 @@ import {
 import { useState } from "react";
 
 export default function LoginScreen({ navigation }) {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
+
+    // Empty fields validation
     if (email.trim() === "" || password.trim() === "") {
-      Alert.alert("Error", "Please enter email and password");
+      Alert.alert(
+        "Error",
+        "Please enter email and password"
+      );
       return;
     }
 
+    // Email validation
     if (!email.includes("@")) {
-      Alert.alert("Error", "Please enter a valid email");
+      Alert.alert(
+        "Error",
+        "Please enter a valid email"
+      );
       return;
     }
 
+    // Password validation
     if (password.length < 6) {
       Alert.alert(
         "Error",
@@ -32,20 +43,26 @@ export default function LoginScreen({ navigation }) {
     }
 
     // Login successful
-    navigation.replace("Home");
+    navigation.replace("Main");
   };
 
   return (
     <View style={styles.container}>
 
+      {/* Logo */}
       <Text style={styles.logo}>🏋️</Text>
 
-      <Text style={styles.title}>Welcome Back!</Text>
+      {/* Title */}
+      <Text style={styles.title}>
+        Welcome Back!
+      </Text>
 
+      {/* Subtitle */}
       <Text style={styles.subtitle}>
         Login to continue your fitness journey
       </Text>
 
+      {/* Email */}
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -55,6 +72,7 @@ export default function LoginScreen({ navigation }) {
         autoCapitalize="none"
       />
 
+      {/* Password */}
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -63,15 +81,21 @@ export default function LoginScreen({ navigation }) {
         secureTextEntry={true}
       />
 
+      {/* Login Button */}
       <TouchableOpacity
         style={styles.button}
         onPress={handleLogin}
       >
-        <Text style={styles.buttonText}>LOGIN</Text>
+        <Text style={styles.buttonText}>
+          LOGIN
+        </Text>
       </TouchableOpacity>
 
+      {/* Register */}
       <TouchableOpacity
-        onPress={() => navigation.navigate("Registration")}
+        onPress={() =>
+          navigation.navigate("Registration")
+        }
       >
         <Text style={styles.registerText}>
           Don't have an account? Register
@@ -83,6 +107,7 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
@@ -138,4 +163,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: "#555555",
   },
+
 });
