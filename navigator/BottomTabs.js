@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import HomeScreen from "../screens/HomeScreen";
 import WorkoutListScreen from "../screens/WorkoutListScreen";
+import ProgressScreen from "../screens/ProgressScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,6 +21,8 @@ export default function BottomTabs() {
             iconName = "home-outline";
           } else if (route.name === "Workout") {
             iconName = "barbell-outline";
+          } else if (route.name === "Progress") {
+            iconName = "stats-chart-outline";
           }
 
           return (
@@ -44,6 +47,11 @@ export default function BottomTabs() {
       <Tab.Screen
         name="Workout"
         component={WorkoutListScreen}
+      />
+
+      <Tab.Screen
+        name="Progress"
+        component={ProgressScreen}
       />
 
     </Tab.Navigator>
