@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,7 +7,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function RegistrationScreen({ navigation }) {
   const [name, setName] = useState("");
@@ -14,7 +15,8 @@ export default function RegistrationScreen({ navigation }) {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
+    // Empty fields
     if (
       name.trim() === "" ||
       email.trim() === "" ||
@@ -25,36 +27,87 @@ export default function RegistrationScreen({ navigation }) {
       return;
     }
 
+    // Email validation
     if (!email.includes("@")) {
-      Alert.alert("Error", "Enter a valid email address");
+      Alert.alert("Error", "Please enter a valid email");
       return;
     }
 
+    // Phone validation
     if (phone.length !== 10) {
-      Alert.alert("Error", "Phone number must contain 10 digits");
+      Alert.alert(
+        "Error",
+        "Phone number must be 10 digits"
+      );
       return;
     }
 
+    // Password validation
     if (password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters");
+      Alert.alert(
+        "Error",
+        "Password must be at least 6 characters"
+      );
       return;
     }
 
-    // Registration successful → Login page
-    navigation.navigate("Login");
+    try {
+      // Save user details
+      await AsyncStorage.setItem(
+        "userName",
+        name.trim()
+      );
+
+      await AsyncStorage.setItem(
+        "userEmail",
+        email.trim()
+      );
+
+      await AsyncStorage.setItem(
+        "userPhone",
+        phone
+      );
+
+      await AsyncStorage.setItem(
+        "userPassword",
+        password
+      );
+
+      // Registration successful
+      Alert.alert(
+        "Registration Successful 🎉",
+        "Your account has been created!",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              navigation.replace("Login");
+            },
+          },
+        ]
+      );
+
+    } catch (error) {
+      console.log("Registration Error:", error);
+      Alert.alert(
+        "Error",
+        "Something went wrong. Please try again."
+      );
+    }
   };
 
   return (
     <View style={styles.container}>
 
-      <Text style={styles.logo}>🏋️</Text>
-
-      <Text style={styles.title}>Create Account</Text>
-
-      <Text style={styles.subtitle}>
-        Start your fitness journey today
+      <Text style={styles.title}>
+        FitLife 💪
       </Text>
 
+      <Text style={styles.subtitle}>
+        Create your account
+      </Text>
+
+      {/* Name */}
       <TextInput
         style={styles.input}
         placeholder="Full Name"
@@ -62,32 +115,36 @@ export default function RegistrationScreen({ navigation }) {
         onChangeText={setName}
       />
 
+      {/* Email */}
       <TextInput
         style={styles.input}
         placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
       />
 
+      {/* Phone */}
       <TextInput
         style={styles.input}
         placeholder="Phone Number"
-        value={phone}
-        onChangeText={setPhone}
         keyboardType="phone-pad"
         maxLength={10}
+        value={phone}
+        onChangeText={setPhone}
       />
 
+      {/* Password */}
       <TextInput
         style={styles.input}
         placeholder="Password"
+        secureTextEntry={true}
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
       />
 
+      {/* Create Account */}
       <TouchableOpacity
         style={styles.button}
         onPress={handleRegister}
@@ -97,8 +154,9 @@ export default function RegistrationScreen({ navigation }) {
         </Text>
       </TouchableOpacity>
 
+      {/* Login */}
       <TouchableOpacity
-        onPress={() => navigation.navigate("Login")}
+        onPress={() => navigation.replace("Login")}
       >
         <Text style={styles.loginText}>
           Already have an account? Login
@@ -112,43 +170,37 @@ export default function RegistrationScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
     justifyContent: "center",
-    padding: 25,
-  },
-
-  logo: {
-    fontSize: 50,
-    textAlign: "center",
-    marginBottom: 10,
+    padding: 20,
+    backgroundColor: "#F5F7FA",
   },
 
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: "bold",
     textAlign: "center",
+    color: "#172033",
   },
 
   subtitle: {
+    fontSize: 16,
     textAlign: "center",
     color: "#777777",
-    marginTop: 8,
-    marginBottom: 25,
+    marginTop: 5,
+    marginBottom: 30,
   },
 
   input: {
     backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "#DDDDDD",
-    borderRadius: 12,
     padding: 15,
-    marginBottom: 12,
+    borderRadius: 12,
+    marginBottom: 15,
     fontSize: 16,
   },
 
   button: {
-    backgroundColor: "#222222",
-    padding: 15,
+    backgroundColor: "#172033",
+    padding: 16,
     borderRadius: 12,
     alignItems: "center",
     marginTop: 5,
@@ -162,7 +214,8 @@ const styles = StyleSheet.create({
 
   loginText: {
     textAlign: "center",
+    color: "#172033",
     marginTop: 20,
-    color: "#555555",
+    fontWeight: "600",
   },
 });

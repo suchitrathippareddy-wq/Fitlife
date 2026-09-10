@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,34 +7,23 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen({ navigation }) {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-
-    // Empty fields validation
+  const handleLogin = async () => {
     if (email.trim() === "" || password.trim() === "") {
-      Alert.alert(
-        "Error",
-        "Please enter email and password"
-      );
+      Alert.alert("Error", "Please enter email and password");
       return;
     }
 
-    // Email validation
     if (!email.includes("@")) {
-      Alert.alert(
-        "Error",
-        "Please enter a valid email"
-      );
+      Alert.alert("Error", "Please enter a valid email");
       return;
     }
 
-    // Password validation
     if (password.length < 6) {
       Alert.alert(
         "Error",
@@ -42,27 +32,52 @@ export default function LoginScreen({ navigation }) {
       return;
     }
 
-    // Login successful
-    navigation.replace("Main");
+    try {
+      const savedEmail = await AsyncStorage.getItem("userEmail");
+      const savedPassword = await AsyncStorage.getItem("userPassword");
+
+      console.log("Saved Email:", savedEmail);
+      console.log("Entered Email:", email);
+      console.log("Password exists:", savedPassword !== null);
+
+      if (
+        email.trim() !== savedEmail ||
+        password !== savedPassword
+      ) {
+        Alert.alert(
+          "Login Failed",
+          "Incorrect email or password"
+        );
+        return;
+      }
+
+      await AsyncStorage.setItem("isLoggedIn", "true");
+
+      // Directly go to Main
+      navigation.replace("Main");
+
+    } catch (error) {
+      console.log("Login Error:", error);
+      Alert.alert(
+        "Error",
+        "Unable to login. Please try again."
+      );
+    }
   };
 
   return (
     <View style={styles.container}>
 
-      {/* Logo */}
       <Text style={styles.logo}>🏋️</Text>
 
-      {/* Title */}
       <Text style={styles.title}>
         Welcome Back!
       </Text>
 
-      {/* Subtitle */}
       <Text style={styles.subtitle}>
         Login to continue your fitness journey
       </Text>
 
-      {/* Email */}
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -72,7 +87,6 @@ export default function LoginScreen({ navigation }) {
         autoCapitalize="none"
       />
 
-      {/* Password */}
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -81,7 +95,6 @@ export default function LoginScreen({ navigation }) {
         secureTextEntry={true}
       />
 
-      {/* Login Button */}
       <TouchableOpacity
         style={styles.button}
         onPress={handleLogin}
@@ -91,11 +104,8 @@ export default function LoginScreen({ navigation }) {
         </Text>
       </TouchableOpacity>
 
-      {/* Register */}
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("Registration")
-        }
+        onPress={() => navigation.replace("Registration")}
       >
         <Text style={styles.registerText}>
           Don't have an account? Register
@@ -107,7 +117,6 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
@@ -163,5 +172,4 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: "#555555",
   },
-
 });
