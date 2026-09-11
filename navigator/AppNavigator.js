@@ -4,6 +4,8 @@ import RegistrationScreen from "../screens/RegistrationScreen";
 import LoginScreen from "../screens/LoginScreen";
 import WorkoutDetailsScreen from "../screens/WorkoutDetailsScreen";
 import WorkoutScreen from "../screens/WorkoutScreen";
+import EditProfileScreen from "../screens/EditProfileScreen";
+import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 import BottomTabs from "./BottomTabs";
 
 const Stack = createNativeStackNavigator();
@@ -36,6 +38,18 @@ export default function AppNavigator() {
       <Stack.Screen
         name="Workout"
         component={WorkoutScreen}
+      />
+
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScreen}
+        options={{ title: "Edit Profile" }}
+      />
+
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
+        options={{ title: "Change Password" }}
       />
 
     </Stack.Navigator>
