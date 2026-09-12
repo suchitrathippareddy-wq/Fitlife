@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function WorkoutScreen({ route, navigation }) {
@@ -27,13 +27,59 @@ export default function WorkoutScreen({ route, navigation }) {
 
   const [currentExercise, setCurrentExercise] = useState(0);
 
+  // Timer
+  const [seconds, setSeconds] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  // Timer start / pause
+  useEffect(() => {
+
+    let timer;
+
+    if (isRunning) {
+
+      timer = setInterval(() => {
+        setSeconds((prev) => prev + 1);
+      }, 1000);
+
+    }
+
+    return () => clearInterval(timer);
+
+  }, [isRunning]);
+
+
+  // Format timer
+  const formatTime = () => {
+
+    const minutes = Math.floor(seconds / 60);
+
+    const remainingSeconds = seconds % 60;
+
+    return (
+      String(minutes).padStart(2, "0") +
+      ":" +
+      String(remainingSeconds).padStart(2, "0")
+    );
+
+  };
+
+
+  // Reset timer
+  const resetTimer = () => {
+
+    setSeconds(0);
+
+    setIsRunning(false);
+
+  };
+
 
   // Finish Workout
   const finishWorkout = async () => {
 
     try {
 
-      // Get old progress
       const oldWorkouts =
         Number(
           await AsyncStorage.getItem("workoutsCompleted")
@@ -50,16 +96,15 @@ export default function WorkoutScreen({ route, navigation }) {
         ) || 0;
 
 
-      // Convert duration
       const workoutMinutes =
         parseInt(duration) || 45;
 
 
-      // Save updated progress
       await AsyncStorage.setItem(
         "workoutsCompleted",
         String(oldWorkouts + 1)
       );
+
 
       await AsyncStorage.setItem(
         "caloriesBurned",
@@ -67,6 +112,7 @@ export default function WorkoutScreen({ route, navigation }) {
           oldCalories + Number(calories)
         )
       );
+
 
       await AsyncStorage.setItem(
         "workoutTime",
@@ -76,11 +122,12 @@ export default function WorkoutScreen({ route, navigation }) {
       );
 
 
-      // Show message
+      setIsRunning(false);
+
+
       alert("Workout Completed! 🎉💪");
 
 
-      // Go back to Home
       navigation.navigate("Home");
 
     } catch (error) {
@@ -129,6 +176,57 @@ export default function WorkoutScreen({ route, navigation }) {
       <Text style={styles.title}>
         {title}
       </Text>
+
+
+      {/* TIMER */}
+
+      <View style={styles.timerCard}>
+
+        <Text style={styles.timerLabel}>
+          WORKOUT TIMER ⏱️
+        </Text>
+
+        <Text style={styles.timer}>
+          {formatTime()}
+        </Text>
+
+
+        <View style={styles.timerButtons}>
+
+          {/* Start / Pause */}
+
+          <TouchableOpacity
+            style={styles.startButton}
+            onPress={() =>
+              setIsRunning(!isRunning)
+            }
+          >
+
+            <Text style={styles.timerButtonText}>
+              {isRunning
+                ? "⏸ PAUSE"
+                : "▶ START"}
+            </Text>
+
+          </TouchableOpacity>
+
+
+          {/* Reset */}
+
+          <TouchableOpacity
+            style={styles.resetButton}
+            onPress={resetTimer}
+          >
+
+            <Text style={styles.resetText}>
+              🔄 RESET
+            </Text>
+
+          </TouchableOpacity>
+
+        </View>
+
+      </View>
 
 
       {/* Exercise Progress */}
@@ -209,7 +307,107 @@ const styles = StyleSheet.create({
 
     textAlign: "center",
 
-    marginBottom: 10,
+    marginBottom: 15,
+
+  },
+
+
+  // Timer
+
+  timerCard: {
+
+    backgroundColor: "#172033",
+
+    borderRadius: 20,
+
+    padding: 20,
+
+    alignItems: "center",
+
+    marginBottom: 20,
+
+  },
+
+
+  timerLabel: {
+
+    color: "#FFFFFF",
+
+    fontSize: 14,
+
+    fontWeight: "bold",
+
+    marginBottom: 5,
+
+  },
+
+
+  timer: {
+
+    color: "#FFFFFF",
+
+    fontSize: 42,
+
+    fontWeight: "bold",
+
+    marginVertical: 5,
+
+  },
+
+
+  timerButtons: {
+
+    flexDirection: "row",
+
+    marginTop: 10,
+
+  },
+
+
+  startButton: {
+
+    backgroundColor: "#FFFFFF",
+
+    paddingVertical: 10,
+
+    paddingHorizontal: 22,
+
+    borderRadius: 10,
+
+    marginRight: 8,
+
+  },
+
+
+  timerButtonText: {
+
+    color: "#172033",
+
+    fontWeight: "bold",
+
+  },
+
+
+  resetButton: {
+
+    borderWidth: 1,
+
+    borderColor: "#FFFFFF",
+
+    paddingVertical: 10,
+
+    paddingHorizontal: 22,
+
+    borderRadius: 10,
+
+  },
+
+
+  resetText: {
+
+    color: "#FFFFFF",
+
+    fontWeight: "bold",
 
   },
 
@@ -222,7 +420,7 @@ const styles = StyleSheet.create({
 
     color: "#777777",
 
-    marginBottom: 25,
+    marginBottom: 15,
 
   },
 
@@ -231,7 +429,7 @@ const styles = StyleSheet.create({
 
     backgroundColor: "#FFFFFF",
 
-    padding: 30,
+    padding: 25,
 
     borderRadius: 20,
 
@@ -248,7 +446,7 @@ const styles = StyleSheet.create({
 
     fontWeight: "bold",
 
-    marginBottom: 20,
+    marginBottom: 15,
 
     textAlign: "center",
 
@@ -287,7 +485,7 @@ const styles = StyleSheet.create({
 
     alignItems: "center",
 
-    marginTop: 25,
+    marginTop: 20,
 
   },
 
