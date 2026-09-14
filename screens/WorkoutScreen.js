@@ -1,59 +1,45 @@
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function WorkoutScreen({ route, navigation }) {
-
   const {
-    title = "Full Body Workout",
-
+    title = "Chest & Triceps",
+    duration = "45 Minutes",
+    calories = "320 kcal",
+    difficulty = "Intermediate",
     exercises = [
       { name: "Push Ups", reps: "10 reps" },
-      { name: "Squats", reps: "15 reps" },
-      { name: "Lunges", reps: "10 each leg" },
-      { name: "Glute Bridge", reps: "15 reps" },
-      { name: "Plank", reps: "30 sec" },
+      { name: "Bench Press", reps: "12 reps" },
+      { name: "Incline Dumbbell Press", reps: "10 reps" },
+      { name: "Tricep Dips", reps: "12 reps" },
     ],
+  } = route.params || {};
 
-    calories = "350",
-    duration = "45 Minutes",
-
-  } = route?.params || {};
-
-  const [currentExercise, setCurrentExercise] = useState(0);
-
-  // Timer
   const [seconds, setSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
-  // Timer start / pause
+  // TIMER
   useEffect(() => {
-
     let timer;
 
     if (isRunning) {
-
       timer = setInterval(() => {
         setSeconds((prev) => prev + 1);
       }, 1000);
-
     }
 
     return () => clearInterval(timer);
-
   }, [isRunning]);
 
-
-  // Format timer
+  // FORMAT TIMER
   const formatTime = () => {
-
     const minutes = Math.floor(seconds / 60);
-
     const remainingSeconds = seconds % 60;
 
     return (
@@ -61,128 +47,135 @@ export default function WorkoutScreen({ route, navigation }) {
       ":" +
       String(remainingSeconds).padStart(2, "0")
     );
-
   };
 
-
-  // Reset timer
+  // RESET TIMER
   const resetTimer = () => {
-
     setSeconds(0);
-
     setIsRunning(false);
-
   };
 
-
-  // Finish Workout
-  const finishWorkout = async () => {
-
+  // COMPLETE WORKOUT
+  const completeWorkout = async () => {
     try {
-
-      const oldWorkouts =
-        Number(
-          await AsyncStorage.getItem("workoutsCompleted")
-        ) || 0;
-
-      const oldCalories =
-        Number(
-          await AsyncStorage.getItem("caloriesBurned")
-        ) || 0;
-
-      const oldTime =
-        Number(
-          await AsyncStorage.getItem("workoutTime")
-        ) || 0;
-
-
-      const workoutMinutes =
-        parseInt(duration) || 45;
-
-
+      // Save completed workout
       await AsyncStorage.setItem(
-        "workoutsCompleted",
-        String(oldWorkouts + 1)
+        "lastWorkout",
+        JSON.stringify({
+          title: title,
+          duration: duration,
+          calories: calories,
+          difficulty: difficulty,
+          completed: true,
+        })
       );
 
-
-      await AsyncStorage.setItem(
-        "caloriesBurned",
-        String(
-          oldCalories + Number(calories)
-        )
-      );
-
-
-      await AsyncStorage.setItem(
-        "workoutTime",
-        String(
-          oldTime + workoutMinutes
-        )
-      );
-
-
+      // Stop timer
       setIsRunning(false);
 
+      // CHEST → LEG
+      if (title === "Chest & Triceps") {
+        navigation.replace("Workout", {
+          title: "Leg Workout",
+          duration: "60 Minutes",
+          calories: "420 kcal",
+          difficulty: "Advanced",
+          exercises: [
+            {
+              name: "Squats",
+              reps: "15 reps",
+            },
+            {
+              name: "Lunges",
+              reps: "10 reps",
+            },
+            {
+              name: "Leg Press",
+              reps: "12 reps",
+            },
+            {
+              name: "Calf Raises",
+              reps: "15 reps",
+            },
+          ],
+        });
 
-      alert("Workout Completed! 🎉💪");
+        return;
+      }
 
+      // LEG → YOGA
+      if (title === "Leg Workout") {
+        navigation.replace("Workout", {
+          title: "Yoga Session",
+          duration: "30 Minutes",
+          calories: "180 kcal",
+          difficulty: "Beginner",
+          exercises: [
+            {
+              name: "Mountain Pose",
+              reps: "30 sec",
+            },
+            {
+              name: "Downward Dog",
+              reps: "30 sec",
+            },
+            {
+              name: "Warrior Pose",
+              reps: "30 sec",
+            },
+            {
+              name: "Child's Pose",
+              reps: "30 sec",
+            },
+          ],
+        });
 
-      navigation.navigate("Home");
+        return;
+      }
+
+      // YOGA → PROGRESS
+      if (title === "Yoga Session") {
+        navigation.navigate("Main", {
+          screen: "Progress",
+        });
+
+        return;
+      }
 
     } catch (error) {
-
-      console.log(
-        "Progress Error:",
-        error
-      );
-
+      console.log("Complete Workout Error:", error);
     }
-
   };
-
-
-  // Next Exercise
-  const nextExercise = () => {
-
-    if (
-      currentExercise <
-      exercises.length - 1
-    ) {
-
-      setCurrentExercise(
-        currentExercise + 1
-      );
-
-    } else {
-
-      finishWorkout();
-
-    }
-
-  };
-
-
-  const exercise =
-    exercises[currentExercise];
-
 
   return (
-
     <View style={styles.container}>
 
-      {/* Workout Title */}
-
+      {/* TITLE */}
       <Text style={styles.title}>
         {title}
       </Text>
 
+      {/* WORKOUT INFO */}
+      <View style={styles.infoBox}>
+
+        <Text style={styles.info}>
+          ⏱ {duration}
+        </Text>
+
+        <Text style={styles.info}>
+          🔥 {calories}
+        </Text>
+
+        <Text style={styles.info}>
+          💪 {difficulty}
+        </Text>
+
+      </View>
 
       {/* TIMER */}
+      <View style={styles.timerBox}>
 
-      <View style={styles.timerCard}>
-
-        <Text style={styles.timerLabel}>
+        <Text style={styles.timerTitle}>
           WORKOUT TIMER ⏱️
         </Text>
 
@@ -190,314 +183,209 @@ export default function WorkoutScreen({ route, navigation }) {
           {formatTime()}
         </Text>
 
-
         <View style={styles.timerButtons}>
-
-          {/* Start / Pause */}
 
           <TouchableOpacity
             style={styles.startButton}
-            onPress={() =>
-              setIsRunning(!isRunning)
-            }
+            onPress={() => setIsRunning(!isRunning)}
           >
-
             <Text style={styles.timerButtonText}>
-              {isRunning
-                ? "⏸ PAUSE"
-                : "▶ START"}
+              {isRunning ? "⏸ PAUSE" : "▶ START"}
             </Text>
-
           </TouchableOpacity>
-
-
-          {/* Reset */}
 
           <TouchableOpacity
             style={styles.resetButton}
             onPress={resetTimer}
           >
-
             <Text style={styles.resetText}>
               🔄 RESET
             </Text>
-
           </TouchableOpacity>
 
         </View>
 
       </View>
 
-
-      {/* Exercise Progress */}
-
-      <Text style={styles.progress}>
-        Exercise {currentExercise + 1} / {exercises.length}
+      {/* EXERCISES */}
+      <Text style={styles.heading}>
+        Exercises
       </Text>
 
+      {exercises.map((exercise, index) => (
+        <View
+          style={styles.exerciseCard}
+          key={index}
+        >
 
-      {/* Exercise Card */}
+          <Text style={styles.exerciseName}>
+            {index + 1}. {exercise.name}
+          </Text>
 
-      <View style={styles.card}>
+          <Text style={styles.reps}>
+            {exercise.reps}
+          </Text>
 
-        <Text style={styles.exerciseName}>
-          {exercise.name}
-        </Text>
+        </View>
+      ))}
 
-
-        <Text style={styles.reps}>
-          {exercise.reps}
-        </Text>
-
-
-        <Text style={styles.instruction}>
-          Complete the exercise and press NEXT.
-        </Text>
-
-      </View>
-
-
-      {/* Next Button */}
-
+      {/* COMPLETE BUTTON */}
       <TouchableOpacity
-        style={styles.button}
-        onPress={nextExercise}
+        style={styles.completeButton}
+        onPress={completeWorkout}
+        activeOpacity={0.8}
       >
-
         <Text style={styles.buttonText}>
-
-          {currentExercise ===
-          exercises.length - 1
-
-            ? "FINISH WORKOUT 🎉"
-
-            : "NEXT EXERCISE ▶"}
-
+          ✓ Complete Workout
         </Text>
+      </TouchableOpacity>
 
+      {/* BACK BUTTON */}
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
+        <Text style={styles.backText}>
+          ← Back
+        </Text>
       </TouchableOpacity>
 
     </View>
-
   );
-
 }
-
 
 const styles = StyleSheet.create({
 
   container: {
-
     flex: 1,
-
-    backgroundColor: "#F5F5F5",
-
-    justifyContent: "center",
-
+    backgroundColor: "#f5f7fb",
     padding: 20,
-
   },
-
 
   title: {
-
-    fontSize: 26,
-
+    fontSize: 28,
     fontWeight: "bold",
-
-    textAlign: "center",
-
-    marginBottom: 15,
-
-  },
-
-
-  // Timer
-
-  timerCard: {
-
-    backgroundColor: "#172033",
-
-    borderRadius: 20,
-
-    padding: 20,
-
-    alignItems: "center",
-
+    marginTop: 30,
     marginBottom: 20,
-
+    textAlign: "center",
   },
 
+  infoBox: {
+    backgroundColor: "#035efc",
+    padding: 18,
+    borderRadius: 15,
+    marginBottom: 15,
+  },
 
-  timerLabel: {
-
+  info: {
     color: "#FFFFFF",
-
-    fontSize: 14,
-
-    fontWeight: "bold",
-
-    marginBottom: 5,
-
+    fontSize: 16,
+    fontWeight: "600",
+    marginVertical: 4,
   },
 
+  timerBox: {
+    backgroundColor: "#172033",
+    padding: 18,
+    borderRadius: 18,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  timerTitle: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "bold",
+  },
 
   timer: {
-
     color: "#FFFFFF",
-
     fontSize: 42,
-
     fontWeight: "bold",
-
-    marginVertical: 5,
-
+    marginVertical: 8,
   },
-
 
   timerButtons: {
-
     flexDirection: "row",
-
-    marginTop: 10,
-
+    marginTop: 5,
   },
-
 
   startButton: {
-
     backgroundColor: "#FFFFFF",
-
     paddingVertical: 10,
-
-    paddingHorizontal: 22,
-
+    paddingHorizontal: 20,
     borderRadius: 10,
-
     marginRight: 8,
-
   },
-
 
   timerButtonText: {
-
     color: "#172033",
-
     fontWeight: "bold",
-
   },
-
 
   resetButton: {
-
     borderWidth: 1,
-
     borderColor: "#FFFFFF",
-
     paddingVertical: 10,
-
-    paddingHorizontal: 22,
-
+    paddingHorizontal: 20,
     borderRadius: 10,
-
   },
-
 
   resetText: {
-
     color: "#FFFFFF",
-
     fontWeight: "bold",
-
   },
 
-
-  progress: {
-
-    textAlign: "center",
-
-    fontSize: 16,
-
-    color: "#777777",
-
-    marginBottom: 15,
-
+  heading: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 12,
   },
 
-
-  card: {
-
+  exerciseCard: {
     backgroundColor: "#FFFFFF",
-
-    padding: 25,
-
-    borderRadius: 20,
-
-    alignItems: "center",
-
-    elevation: 5,
-
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    elevation: 2,
   },
-
 
   exerciseName: {
-
-    fontSize: 30,
-
-    fontWeight: "bold",
-
-    marginBottom: 15,
-
-    textAlign: "center",
-
+    fontSize: 16,
+    fontWeight: "600",
   },
-
 
   reps: {
-
-    fontSize: 24,
-
-    fontWeight: "bold",
-
-    marginBottom: 15,
-
-  },
-
-
-  instruction: {
-
-    textAlign: "center",
-
+    fontSize: 14,
     color: "#666666",
-
-    fontSize: 15,
-
   },
 
-
-  button: {
-
-    backgroundColor: "#222222",
-
+  completeButton: {
+    backgroundColor: "#22c55e",
     padding: 17,
-
     borderRadius: 12,
-
-    alignItems: "center",
-
-    marginTop: 20,
-
+    marginTop: 10,
   },
-
 
   buttonText: {
-
     color: "#FFFFFF",
-
-    fontSize: 16,
-
+    textAlign: "center",
+    fontSize: 17,
     fontWeight: "bold",
+  },
 
+  backButton: {
+    marginTop: 10,
+    padding: 12,
+  },
+
+  backText: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "#035efc",
+    fontWeight: "bold",
   },
 
 });

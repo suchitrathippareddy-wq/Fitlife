@@ -122,9 +122,192 @@ export default function ProgressScreen() {
 
       </View>
 
+
+      {/* ACHIEVEMENTS */}
+
+      <Text style={styles.achievementHeading}>
+        🏆 Achievements
+      </Text>
+
+      <Text style={styles.achievementSubtitle}>
+        Complete workouts and unlock badges
+      </Text>
+
+
+      {/* First Workout */}
+
+      <View
+        style={[
+          styles.achievementCard,
+          workouts >= 1
+            ? styles.unlockedCard
+            : styles.lockedCard,
+        ]}
+      >
+
+        <Text style={styles.badge}>
+          🥉
+        </Text>
+
+        <View style={styles.achievementInfo}>
+
+          <Text style={styles.achievementTitle}>
+            First Workout
+          </Text>
+
+          <Text style={styles.achievementText}>
+            Complete your first workout
+          </Text>
+
+          <Text
+            style={
+              workouts >= 1
+                ? styles.unlockedText
+                : styles.lockedText
+            }
+          >
+            {workouts >= 1
+              ? "✓ UNLOCKED"
+              : "🔒 LOCKED"}
+          </Text>
+
+        </View>
+
+      </View>
+
+
+      {/* 5 Workouts */}
+
+      <View
+        style={[
+          styles.achievementCard,
+          workouts >= 5
+            ? styles.unlockedCard
+            : styles.lockedCard,
+        ]}
+      >
+
+        <Text style={styles.badge}>
+          🥈
+        </Text>
+
+        <View style={styles.achievementInfo}>
+
+          <Text style={styles.achievementTitle}>
+            5 Workouts
+          </Text>
+
+          <Text style={styles.achievementText}>
+            Complete 5 workouts
+          </Text>
+
+          <Text
+            style={
+              workouts >= 5
+                ? styles.unlockedText
+                : styles.lockedText
+            }
+          >
+            {workouts >= 5
+              ? "✓ UNLOCKED"
+              : "🔒 LOCKED"}
+          </Text>
+
+        </View>
+
+      </View>
+
+
+      {/* 10 Workouts */}
+
+      <View
+        style={[
+          styles.achievementCard,
+          workouts >= 10
+            ? styles.unlockedCard
+            : styles.lockedCard,
+        ]}
+      >
+
+        <Text style={styles.badge}>
+          🥇
+        </Text>
+
+        <View style={styles.achievementInfo}>
+
+          <Text style={styles.achievementTitle}>
+            10 Workouts
+          </Text>
+
+          <Text style={styles.achievementText}>
+            Complete 10 workouts
+          </Text>
+
+          <Text
+            style={
+              workouts >= 10
+                ? styles.unlockedText
+                : styles.lockedText
+            }
+          >
+            {workouts >= 10
+              ? "✓ UNLOCKED"
+              : "🔒 LOCKED"}
+          </Text>
+
+        </View>
+
+      </View>
+
+
+      {/* Calorie Achievement */}
+
+      <View
+        style={[
+          styles.achievementCard,
+          calories >= 1000
+            ? styles.unlockedCard
+            : styles.lockedCard,
+        ]}
+      >
+
+        <Text style={styles.badge}>
+          🔥
+        </Text>
+
+        <View style={styles.achievementInfo}>
+
+          <Text style={styles.achievementTitle}>
+            Calorie Crusher
+          </Text>
+
+          <Text style={styles.achievementText}>
+            Burn 1000 calories
+          </Text>
+
+          <Text
+            style={
+              calories >= 1000
+                ? styles.unlockedText
+                : styles.lockedText
+            }
+          >
+            {calories >= 1000
+              ? "✓ UNLOCKED"
+              : "🔒 LOCKED"}
+          </Text>
+
+        </View>
+
+      </View>
+
+
+      <View style={styles.bottomSpace} />
+
     </ScrollView>
   );
 }
+
 
 const styles = StyleSheet.create({
 
@@ -175,7 +358,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     padding: 20,
     borderRadius: 18,
-    marginBottom: 20,
+    marginBottom: 25,
     elevation: 4,
   },
 
@@ -208,6 +391,80 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#666666",
     marginTop: 12,
+  },
+
+
+  /* Achievements */
+
+  achievementHeading: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#172033",
+  },
+
+  achievementSubtitle: {
+    fontSize: 14,
+    color: "#777777",
+    marginTop: 5,
+    marginBottom: 15,
+  },
+
+  achievementCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    padding: 18,
+    borderRadius: 18,
+    marginBottom: 12,
+    elevation: 3,
+  },
+
+  unlockedCard: {
+    borderWidth: 2,
+    borderColor: "#222222",
+  },
+
+  lockedCard: {
+    opacity: 0.6,
+  },
+
+  badge: {
+    fontSize: 45,
+    marginRight: 15,
+  },
+
+  achievementInfo: {
+    flex: 1,
+  },
+
+  achievementTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#172033",
+  },
+
+  achievementText: {
+    fontSize: 14,
+    color: "#777777",
+    marginTop: 4,
+  },
+
+  unlockedText: {
+    fontSize: 13,
+    fontWeight: "bold",
+    color: "#222222",
+    marginTop: 7,
+  },
+
+  lockedText: {
+    fontSize: 13,
+    fontWeight: "bold",
+    color: "#888888",
+    marginTop: 7,
+  },
+
+  bottomSpace: {
+    height: 30,
   },
 
 });

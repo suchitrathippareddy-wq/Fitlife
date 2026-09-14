@@ -53,7 +53,7 @@ export default function WorkoutListScreen({ navigation }) {
           style={styles.card}
           onPress={() =>
             navigation.navigate("WorkoutDetails", {
-              title: workout.title.replace(/^.{2}/, ""),
+              title: workout.title.substring(2),
               duration: workout.duration,
               calories: workout.calories,
               difficulty: workout.difficulty,
@@ -82,6 +82,7 @@ export default function WorkoutListScreen({ navigation }) {
           </Text>
 
           <View style={styles.startRow}>
+
             <Text style={styles.start}>
               VIEW WORKOUT
             </Text>
@@ -89,6 +90,7 @@ export default function WorkoutListScreen({ navigation }) {
             <Text style={styles.arrow}>
               →
             </Text>
+
           </View>
 
         </TouchableOpacity>
