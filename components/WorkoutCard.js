@@ -2,7 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
 } from "react-native";
 
 export default function WorkoutCard({
@@ -10,7 +9,6 @@ export default function WorkoutCard({
   duration,
   calories,
   difficulty,
-  navigation,
 }) {
   return (
     <View style={styles.card}>
@@ -20,55 +18,40 @@ export default function WorkoutCard({
       </Text>
 
       <View style={styles.infoRow}>
+
         <Text style={styles.info}>
           ⏱️ {duration}
         </Text>
 
         <Text style={styles.info}>
-          🔥 {calories} kcal
+          🔥 {calories}
         </Text>
+
       </View>
 
       <Text style={styles.difficulty}>
         📈 {difficulty}
       </Text>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() =>
-          navigation.navigate("WorkoutDetails", {
-            title: title,
-            duration: duration,
-            calories: calories,
-            difficulty: difficulty,
-          })
-        }
-      >
-        <Text style={styles.buttonText}>
-          START WORKOUT ▶
-        </Text>
-      </TouchableOpacity>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+
   card: {
     backgroundColor: "#FFFFFF",
+    padding: 20,
+    borderRadius: 18,
     marginHorizontal: 15,
-    marginVertical: 8,
-    padding: 18,
-    borderRadius: 16,
+    marginBottom: 15,
     elevation: 4,
-    shadowOpacity: 0.15,
-    shadowRadius: 5,
   },
 
   title: {
-    fontSize: 20,
+    fontSize: 21,
     fontWeight: "bold",
-    marginBottom: 12,
+    marginBottom: 15,
   },
 
   infoRow: {
@@ -78,24 +61,13 @@ const styles = StyleSheet.create({
 
   info: {
     fontSize: 14,
+    color: "#555555",
   },
 
   difficulty: {
-    marginTop: 10,
+    marginTop: 12,
     fontSize: 14,
+    color: "#666666",
   },
 
-  button: {
-    backgroundColor: "#222222",
-    marginTop: 15,
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-
-  buttonText: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
-    fontSize: 14,
-  },
 });

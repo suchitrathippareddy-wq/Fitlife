@@ -5,9 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Alert,
   Modal,
 } from "react-native";
+
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -48,7 +48,7 @@ export default function ProfileScreen({ navigation }) {
     }, [])
   );
 
-  // Logout popup open
+  // Logout popup
   const handleLogout = () => {
     setShowLogout(true);
   };
@@ -159,6 +159,17 @@ export default function ProfileScreen({ navigation }) {
         >
           <Text style={styles.passwordText}>
             🔐 CHANGE PASSWORD
+          </Text>
+        </TouchableOpacity>
+
+        {/* Workout History */}
+        <TouchableOpacity
+          style={styles.historyButton}
+          onPress={() => navigation.navigate("WorkoutHistory")}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.historyText}>
+            📜 WORKOUT HISTORY
           </Text>
         </TouchableOpacity>
 
@@ -421,6 +432,23 @@ const styles = StyleSheet.create({
   },
 
   passwordText: {
+    color: "#172033",
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+
+  historyButton: {
+    backgroundColor: "#FFFFFF",
+    marginHorizontal: 15,
+    marginTop: 10,
+    paddingVertical: 14,
+    borderRadius: 14,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#172033",
+  },
+
+  historyText: {
     color: "#172033",
     fontSize: 15,
     fontWeight: "bold",

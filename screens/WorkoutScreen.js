@@ -58,20 +58,94 @@ export default function WorkoutScreen({ route, navigation }) {
   // COMPLETE WORKOUT
   const completeWorkout = async () => {
     try {
-      // Save completed workout
+      // Get old workout history
+      const savedHistory =
+        await AsyncStorage.getItem("workoutHistory");
+
+      let history = savedHistory
+        ? JSON.parse(savedHistory)
+        : [];
+
+      // Add current completed workout
+      const completedWorkout = {
+        title: title,
+        duration: duration,
+        calories: calories,
+        difficulty: difficulty,
+        completed: true,
+      };
+
+      history.push(completedWorkout);
+
+      // Save workout history
+      await AsyncStorage.setItem(
+        "workoutHistory",
+        JSON.stringify(history)
+      );
+
+      // Save last workout
       await AsyncStorage.setItem(
         "lastWorkout",
-        JSON.stringify({
-          title: title,
-          duration: duration,
-          calories: calories,
-          difficulty: difficulty,
-          completed: true,
-        })
+        JSON.stringify(completedWorkout)
+      );
+
+      // Update workout count
+      const oldWorkouts =
+        Number(
+          await AsyncStorage.getItem("workoutsCompleted")
+        ) || 0;
+
+      await AsyncStorage.setItem(
+        "workoutsCompleted",
+        String(oldWorkouts + 1)
+      );
+
+      // Update calories
+      const calorieNumber =
+        Number(String(calories).replace(" kcal", "")) || 0;
+
+      const oldCalories =
+        Number(
+          await AsyncStorage.getItem("caloriesBurned")
+        ) || 0;
+
+      await AsyncStorage.setItem(
+        "caloriesBurned",
+        String(oldCalories + calorieNumber)
       );
 
       // Stop timer
       setIsRunning(false);
+
+      // FULL BODY → CHEST
+      if (title === "Full Body Workout") {
+        navigation.replace("Workout", {
+          title: "Chest & Triceps",
+          duration: "45 Minutes",
+          calories: "320 kcal",
+          difficulty: "Intermediate",
+          exercises: [
+            {
+              name: "Push Ups",
+              reps: "10 reps",
+            },
+            {
+              name: "Bench Press",
+              reps: "12 reps",
+            },
+            {
+              name: "Incline Dumbbell Press",
+              reps: "10 reps",
+            },
+            {
+              name: "Tricep Dips",
+              reps: "12 reps",
+            },
+          ],
+        });
+
+        return;
+      }
 
       // CHEST → LEG
       if (title === "Chest & Triceps") {
