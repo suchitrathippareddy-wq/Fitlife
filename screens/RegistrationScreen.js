@@ -10,104 +10,103 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function RegistrationScreen({ navigation }) {
+  const [showForm, setShowForm] = useState(false);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
   const handleRegister = async () => {
-    // Empty fields
-    if (
-      name.trim() === "" ||
-      email.trim() === "" ||
-      phone.trim() === "" ||
-      password.trim() === ""
-    ) {
+    if (!name || !email || !phone || !password) {
       Alert.alert("Error", "Please fill all fields");
       return;
     }
 
-    // Email validation
     if (!email.includes("@")) {
       Alert.alert("Error", "Please enter a valid email");
       return;
     }
 
-    // Phone validation
     if (phone.length !== 10) {
-      Alert.alert(
-        "Error",
-        "Phone number must be 10 digits"
-      );
+      Alert.alert("Error", "Phone number must be 10 digits");
       return;
     }
 
-    // Password validation
     if (password.length < 6) {
       Alert.alert(
         "Error",
-        "Password must be at least 6 characters"
+        "Password must contain at least 6 characters"
       );
       return;
     }
 
     try {
-      // Save user details
-      await AsyncStorage.setItem(
-        "userName",
-        name.trim()
-      );
+      await AsyncStorage.setItem("userName", name);
+      await AsyncStorage.setItem("userEmail", email);
+      await AsyncStorage.setItem("userPhone", phone);
+      await AsyncStorage.setItem("userPassword", password);
 
-      await AsyncStorage.setItem(
-        "userEmail",
-        email.trim()
-      );
-
-      await AsyncStorage.setItem(
-        "userPhone",
-        phone
-      );
-
-      await AsyncStorage.setItem(
-        "userPassword",
-        password
-      );
-
-      // Registration successful
       Alert.alert(
         "Registration Successful 🎉",
-        "Your account has been created!",
+        "Your account has been created successfully!",
         [
           {
-            text: "OK",
-            onPress: () => {
-              navigation.replace("Login");
-            },
+            text: "Continue to Login",
+            onPress: () => navigation.navigate("Login"),
           },
         ]
       );
-
     } catch (error) {
-      console.log("Registration Error:", error);
-      Alert.alert(
-        "Error",
-        "Something went wrong. Please try again."
-      );
+      Alert.alert("Error", "Registration failed");
     }
   };
 
+  if (!showForm) {
+    return (
+      <View style={styles.welcomeContainer}>
+        <Text style={styles.logo}>🏋️</Text>
+
+        <Text style={styles.welcomeTitle}>
+          Welcome to FitLife
+        </Text>
+
+        <Text style={styles.welcomeSubtitle}>
+          Start your fitness journey today
+        </Text>
+
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={() => setShowForm(true)}
+        >
+          <Text style={styles.createButtonText}>
+            CREATE ACCOUNT
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Login")}
+        >
+          <Text style={styles.loginText}>
+            Already have an account? Login
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
+      <Text style={styles.logo}>🏋️</Text>
 
       <Text style={styles.title}>
-        FitLife 💪
+        Create Account
       </Text>
 
       <Text style={styles.subtitle}>
-        Create your account
+        Enter your details to get started
       </Text>
 
-      {/* Name */}
       <TextInput
         style={styles.input}
         placeholder="Full Name"
@@ -115,17 +114,15 @@ export default function RegistrationScreen({ navigation }) {
         onChangeText={setName}
       />
 
-      {/* Email */}
       <TextInput
         style={styles.input}
         placeholder="Email"
         keyboardType="email-address"
-        autoCapitalize="none"
         value={email}
         onChangeText={setEmail}
+        autoCapitalize="none"
       />
 
-      {/* Phone */}
       <TextInput
         style={styles.input}
         placeholder="Phone Number"
@@ -135,87 +132,146 @@ export default function RegistrationScreen({ navigation }) {
         onChangeText={setPhone}
       />
 
-      {/* Password */}
       <TextInput
         style={styles.input}
         placeholder="Password"
-        secureTextEntry={true}
+        secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
 
-      {/* Create Account */}
       <TouchableOpacity
         style={styles.button}
         onPress={handleRegister}
+        activeOpacity={0.8}
       >
         <Text style={styles.buttonText}>
           CREATE ACCOUNT
         </Text>
       </TouchableOpacity>
 
-      {/* Login */}
       <TouchableOpacity
-        onPress={() => navigation.replace("Login")}
+        onPress={() => navigation.navigate("Login")}
       >
         <Text style={styles.loginText}>
           Already have an account? Login
         </Text>
       </TouchableOpacity>
 
+      <TouchableOpacity
+        onPress={() => setShowForm(false)}
+      >
+        <Text style={styles.backText}>
+          ← Back
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  welcomeContainer: {
+    flex: 1,
+    backgroundColor: "#F5F7FB",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 25,
+  },
+
   container: {
     flex: 1,
+    backgroundColor: "#F5F7FB",
     justifyContent: "center",
-    padding: 20,
-    backgroundColor: "#F5F7FA",
+    padding: 25,
+  },
+
+  logo: {
+    fontSize: 60,
+    textAlign: "center",
+    marginBottom: 15,
+  },
+
+  welcomeTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#172033",
+    textAlign: "center",
+  },
+
+  welcomeSubtitle: {
+    fontSize: 16,
+    color: "#777777",
+    textAlign: "center",
+    marginTop: 8,
+    marginBottom: 30,
+  },
+
+  createButton: {
+    backgroundColor: "#035efc",
+    width: "100%",
+    paddingVertical: 17,
+    borderRadius: 14,
+  },
+
+  createButtonText: {
+    color: "#FFFFFF",
+    textAlign: "center",
+    fontSize: 17,
+    fontWeight: "bold",
   },
 
   title: {
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
     color: "#172033",
   },
 
   subtitle: {
-    fontSize: 16,
-    textAlign: "center",
+    fontSize: 15,
     color: "#777777",
-    marginTop: 5,
-    marginBottom: 30,
+    textAlign: "center",
+    marginTop: 8,
+    marginBottom: 25,
   },
 
   input: {
     backgroundColor: "#FFFFFF",
-    padding: 15,
     borderRadius: 12,
-    marginBottom: 15,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
     fontSize: 16,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
   },
 
   button: {
-    backgroundColor: "#172033",
-    padding: 16,
+    backgroundColor: "#035efc",
+    paddingVertical: 16,
     borderRadius: 12,
-    alignItems: "center",
-    marginTop: 5,
+    marginTop: 8,
   },
 
   buttonText: {
     color: "#FFFFFF",
+    textAlign: "center",
+    fontSize: 16,
     fontWeight: "bold",
-    fontSize: 15,
   },
 
   loginText: {
+    color: "#035efc",
     textAlign: "center",
-    color: "#172033",
     marginTop: 20,
+    fontSize: 15,
     fontWeight: "600",
+  },
+
+  backText: {
+    color: "#777777",
+    textAlign: "center",
+    marginTop: 15,
+    fontSize: 15,
   },
 });

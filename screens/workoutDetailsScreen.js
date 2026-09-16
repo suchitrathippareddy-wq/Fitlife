@@ -14,10 +14,16 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
     difficulty = "Intermediate",
   } = route.params || {};
 
-  // Exercises based on workout
   let exercises = [];
 
-  if (title === "Chest & Triceps") {
+  if (title === "Full Body Workout") {
+    exercises = [
+      { name: "Jumping Jacks", reps: "20 reps" },
+      { name: "Squats", reps: "15 reps" },
+      { name: "Push Ups", reps: "10 reps" },
+      { name: "Lunges", reps: "10 reps" },
+    ];
+  } else if (title === "Chest & Triceps") {
     exercises = [
       { name: "Push Ups", reps: "10 reps" },
       { name: "Bench Press", reps: "12 reps" },
@@ -80,7 +86,6 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
         </View>
       ))}
 
-      {/* Start Workout */}
       <TouchableOpacity
         style={styles.startButton}
         onPress={() =>
@@ -98,7 +103,6 @@ export default function WorkoutDetailsScreen({ route, navigation }) {
         </Text>
       </TouchableOpacity>
 
-      {/* Back */}
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}
