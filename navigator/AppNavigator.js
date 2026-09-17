@@ -6,6 +6,7 @@ import WorkoutDetailsScreen from "../screens/WorkoutDetailsScreen";
 import WorkoutScreen from "../screens/WorkoutScreen";
 import WorkoutHistoryScreen from "../screens/WorkoutHistoryScreen";
 import TrainerBookingScreen from "../screens/TrainerBookingScreen";
+import MyBookingsScreen from "../screens/MyBookingsScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 import BottomTabs from "./BottomTabs";
@@ -38,6 +39,11 @@ export default function AppNavigator() {
       <Stack.Screen
         name="TrainerBooking"
         component={TrainerBookingScreen}
+      />
+
+      <Stack.Screen
+        name="MyBookings"
+        component={MyBookingsScreen}
       />
 
       <Stack.Screen

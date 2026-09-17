@@ -7,11 +7,43 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function TrainerBookingScreen({ navigation }) {
+  const handleBooking = async () => {
+    const newBooking = {
+      trainer: "John Smith",
+      specialization: "Strength & Fitness Coach",
+      time: "7:00 AM",
+      price: "₹500 / Session",
+    };
+
+    try {
+      const existingBookings =
+        await AsyncStorage.getItem("trainerBookings");
+
+      const bookings = existingBookings
+        ? JSON.parse(existingBookings)
+        : [];
+
+      bookings.push(newBooking);
+
+      await AsyncStorage.setItem(
+        "trainerBookings",
+        JSON.stringify(bookings)
+      );
+
+      alert("Trainer booked successfully! 🎉");
+
+      navigation.navigate("MyBookings");
+    } catch (error) {
+      console.log("Booking Error:", error);
+      alert("Booking failed");
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
-
       <Image
         source={{
           uri: "https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&w=800&q=90",
@@ -20,7 +52,6 @@ export default function TrainerBookingScreen({ navigation }) {
       />
 
       <View style={styles.content}>
-
         <Text style={styles.name}>
           John Smith
         </Text>
@@ -50,7 +81,6 @@ export default function TrainerBookingScreen({ navigation }) {
         </Text>
 
         <View style={styles.infoCard}>
-
           <Text style={styles.info}>
             🏆 Experience: 8 Years
           </Text>
@@ -66,7 +96,6 @@ export default function TrainerBookingScreen({ navigation }) {
           <Text style={styles.info}>
             💰 Price: ₹500 / Session
           </Text>
-
         </View>
 
         <Text style={styles.heading}>
@@ -74,7 +103,6 @@ export default function TrainerBookingScreen({ navigation }) {
         </Text>
 
         <View style={styles.timeRow}>
-
           <View style={styles.timeBox}>
             <Text style={styles.time}>
               7:00 AM
@@ -92,15 +120,12 @@ export default function TrainerBookingScreen({ navigation }) {
               5:00 PM
             </Text>
           </View>
-
         </View>
 
         <TouchableOpacity
           style={styles.bookButton}
           activeOpacity={0.8}
-          onPress={() => {
-            alert("Trainer booked successfully! 🎉");
-          }}
+          onPress={handleBooking}
         >
           <Text style={styles.bookText}>
             📅 BOOK TRAINER
@@ -115,15 +140,12 @@ export default function TrainerBookingScreen({ navigation }) {
             ← Back
           </Text>
         </TouchableOpacity>
-
       </View>
-
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     backgroundColor: "#F5F7FA",
@@ -238,5 +260,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-
 });
