@@ -4,11 +4,12 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function WorkoutHistoryScreen() {
+export default function WorkoutHistoryScreen({ navigation }) {
   const [history, setHistory] = useState([]);
 
   const loadHistory = async () => {
@@ -33,8 +34,10 @@ export default function WorkoutHistoryScreen() {
   );
 
   return (
-    <ScrollView style={styles.container}>
-
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       <Text style={styles.heading}>
         📜 Workout History
       </Text>
@@ -44,7 +47,6 @@ export default function WorkoutHistoryScreen() {
       </Text>
 
       {history.length === 0 ? (
-
         <View style={styles.emptyCard}>
           <Text style={styles.emptyIcon}>
             🏋️
@@ -58,50 +60,65 @@ export default function WorkoutHistoryScreen() {
             Complete a workout to see it here.
           </Text>
         </View>
-
       ) : (
-
         history.map((workout, index) => (
-
           <View
             style={styles.card}
             key={index}
           >
+            <View style={styles.topRow}>
+              <Text style={styles.number}>
+                #{index + 1}
+              </Text>
+
+              <View style={styles.completedBox}>
+                <Text style={styles.completedText}>
+                  ✓ COMPLETED
+                </Text>
+              </View>
+            </View>
 
             <Text style={styles.title}>
               {workout.title}
             </Text>
 
-            <Text style={styles.info}>
-              ⏱️ {workout.duration}
-            </Text>
+            <View style={styles.infoBox}>
+              <Text style={styles.info}>
+                ⏱️ {workout.duration}
+              </Text>
 
-            <Text style={styles.info}>
-              🔥 {workout.calories}
-            </Text>
+              <Text style={styles.info}>
+                🔥 {workout.calories}
+              </Text>
 
-            <Text style={styles.info}>
-              💪 {workout.difficulty}
-            </Text>
-
-            <View style={styles.completedBox}>
-              <Text style={styles.completedText}>
-                ✓ COMPLETED
+              <Text style={styles.info}>
+                💪 {workout.difficulty}
               </Text>
             </View>
 
+            {workout.date && (
+              <Text style={styles.date}>
+                📅 {workout.date}
+              </Text>
+            )}
           </View>
-
         ))
-
       )}
 
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.backText}>
+          ← Back
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     backgroundColor: "#F5F7FB",
@@ -111,6 +128,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 28,
     fontWeight: "bold",
+    color: "#172033",
     marginTop: 20,
   },
 
@@ -129,29 +147,55 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
 
+  topRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  number: {
+    fontSize: 14,
+    color: "#777777",
+    fontWeight: "bold",
+  },
+
   title: {
     fontSize: 21,
     fontWeight: "bold",
+    color: "#172033",
+    marginTop: 15,
     marginBottom: 15,
+  },
+
+  infoBox: {
+    backgroundColor: "#F5F7FB",
+    padding: 14,
+    borderRadius: 12,
   },
 
   info: {
     fontSize: 15,
     color: "#555555",
-    marginBottom: 8,
+    marginBottom: 7,
   },
 
   completedBox: {
     backgroundColor: "#DCFCE7",
-    padding: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
     borderRadius: 10,
-    marginTop: 8,
-    alignItems: "center",
   },
 
   completedText: {
     color: "#16A34A",
+    fontSize: 12,
     fontWeight: "bold",
+  },
+
+  date: {
+    fontSize: 13,
+    color: "#777777",
+    marginTop: 12,
   },
 
   emptyCard: {
@@ -171,6 +215,7 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 19,
     fontWeight: "bold",
+    color: "#172033",
   },
 
   emptySubtext: {
@@ -180,4 +225,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
+  backButton: {
+    backgroundColor: "#035efc",
+    paddingVertical: 15,
+    borderRadius: 12,
+    marginTop: 5,
+    marginBottom: 30,
+  },
+
+  backText: {
+    color: "#FFFFFF",
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });

@@ -3,13 +3,13 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function ProgressScreen() {
-
+export default function ProgressScreen({ navigation }) {
   const [workouts, setWorkouts] = useState(0);
   const [calories, setCalories] = useState(0);
   const [time, setTime] = useState(0);
@@ -28,7 +28,6 @@ export default function ProgressScreen() {
       setWorkouts(Number(savedWorkouts) || 0);
       setCalories(Number(savedCalories) || 0);
       setTime(Number(savedTime) || 0);
-
     } catch (error) {
       console.log("Progress Error:", error);
     }
@@ -43,68 +42,48 @@ export default function ProgressScreen() {
   const progress = Math.min(workouts * 20, 100);
 
   return (
-    <ScrollView style={styles.container}>
-
-      <Text style={styles.heading}>
-        📊 My Progress
-      </Text>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
+      <Text style={styles.heading}>📊 My Progress</Text>
 
       <Text style={styles.subtitle}>
         Track your fitness journey
       </Text>
 
-      {/* Workouts */}
-      <View style={styles.card}>
-        <Text style={styles.icon}>🏋️</Text>
+      <View style={styles.statsRow}>
+        <View style={styles.smallCard}>
+          <Text style={styles.icon}>🏋️</Text>
+          <Text style={styles.value}>{workouts}</Text>
+          <Text style={styles.label}>Workouts</Text>
+        </View>
 
-        <Text style={styles.label}>
-          Workouts Completed
-        </Text>
+        <View style={styles.smallCard}>
+          <Text style={styles.icon}>🔥</Text>
+          <Text style={styles.value}>{calories}</Text>
+          <Text style={styles.label}>Calories</Text>
+        </View>
 
-        <Text style={styles.value}>
-          {workouts}
-        </Text>
+        <View style={styles.smallCard}>
+          <Text style={styles.icon}>⏱️</Text>
+          <Text style={styles.value}>{time}</Text>
+          <Text style={styles.label}>Minutes</Text>
+        </View>
       </View>
 
-      {/* Calories */}
-      <View style={styles.card}>
-        <Text style={styles.icon}>🔥</Text>
-
-        <Text style={styles.label}>
-          Calories Burned
-        </Text>
-
-        <Text style={styles.value}>
-          {calories} kcal
-        </Text>
-      </View>
-
-      {/* Time */}
-      <View style={styles.card}>
-        <Text style={styles.icon}>⏱️</Text>
-
-        <Text style={styles.label}>
-          Total Workout Time
-        </Text>
-
-        <Text style={styles.value}>
-          {time} min
-        </Text>
-      </View>
-
-      {/* Progress */}
       <View style={styles.progressCard}>
+        <View style={styles.progressHeader}>
+          <Text style={styles.progressTitle}>
+            🎯 Overall Progress
+          </Text>
 
-        <Text style={styles.progressTitle}>
-          🎯 Overall Progress
-        </Text>
-
-        <Text style={styles.progressValue}>
-          {progress}%
-        </Text>
+          <Text style={styles.progressValue}>
+            {progress}%
+          </Text>
+        </View>
 
         <View style={styles.progressBackground}>
-
           <View
             style={[
               styles.progressBar,
@@ -113,17 +92,21 @@ export default function ProgressScreen() {
               },
             ]}
           />
-
         </View>
 
         <Text style={styles.goal}>
           Goal: Weight Loss
         </Text>
 
+        <Text style={styles.goalText}>
+          {progress === 100
+            ? "🎉 Goal progress completed!"
+            : `Complete ${Math.max(
+                0,
+                5 - workouts
+              )} more workouts to reach the next milestone.`}
+        </Text>
       </View>
-
-
-      {/* ACHIEVEMENTS */}
 
       <Text style={styles.achievementHeading}>
         🏆 Achievements
@@ -133,9 +116,6 @@ export default function ProgressScreen() {
         Complete workouts and unlock badges
       </Text>
 
-
-      {/* First Workout */}
-
       <View
         style={[
           styles.achievementCard,
@@ -144,13 +124,9 @@ export default function ProgressScreen() {
             : styles.lockedCard,
         ]}
       >
-
-        <Text style={styles.badge}>
-          🥉
-        </Text>
+        <Text style={styles.badge}>🥉</Text>
 
         <View style={styles.achievementInfo}>
-
           <Text style={styles.achievementTitle}>
             First Workout
           </Text>
@@ -170,13 +146,8 @@ export default function ProgressScreen() {
               ? "✓ UNLOCKED"
               : "🔒 LOCKED"}
           </Text>
-
         </View>
-
       </View>
-
-
-      {/* 5 Workouts */}
 
       <View
         style={[
@@ -186,13 +157,9 @@ export default function ProgressScreen() {
             : styles.lockedCard,
         ]}
       >
-
-        <Text style={styles.badge}>
-          🥈
-        </Text>
+        <Text style={styles.badge}>🥈</Text>
 
         <View style={styles.achievementInfo}>
-
           <Text style={styles.achievementTitle}>
             5 Workouts
           </Text>
@@ -212,13 +179,8 @@ export default function ProgressScreen() {
               ? "✓ UNLOCKED"
               : "🔒 LOCKED"}
           </Text>
-
         </View>
-
       </View>
-
-
-      {/* 10 Workouts */}
 
       <View
         style={[
@@ -228,13 +190,9 @@ export default function ProgressScreen() {
             : styles.lockedCard,
         ]}
       >
-
-        <Text style={styles.badge}>
-          🥇
-        </Text>
+        <Text style={styles.badge}>🥇</Text>
 
         <View style={styles.achievementInfo}>
-
           <Text style={styles.achievementTitle}>
             10 Workouts
           </Text>
@@ -254,13 +212,8 @@ export default function ProgressScreen() {
               ? "✓ UNLOCKED"
               : "🔒 LOCKED"}
           </Text>
-
         </View>
-
       </View>
-
-
-      {/* Calorie Achievement */}
 
       <View
         style={[
@@ -270,13 +223,9 @@ export default function ProgressScreen() {
             : styles.lockedCard,
         ]}
       >
-
-        <Text style={styles.badge}>
-          🔥
-        </Text>
+        <Text style={styles.badge}>🔥</Text>
 
         <View style={styles.achievementInfo}>
-
           <Text style={styles.achievementTitle}>
             Calorie Crusher
           </Text>
@@ -296,30 +245,35 @@ export default function ProgressScreen() {
               ? "✓ UNLOCKED"
               : "🔒 LOCKED"}
           </Text>
-
         </View>
-
       </View>
 
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.backText}>
+          ← Back
+        </Text>
+      </TouchableOpacity>
 
       <View style={styles.bottomSpace} />
-
     </ScrollView>
   );
 }
 
-
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#F5F7FB",
     padding: 15,
   },
 
   heading: {
     fontSize: 28,
     fontWeight: "bold",
+    color: "#172033",
     marginTop: 20,
   },
 
@@ -330,28 +284,36 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  card: {
-    backgroundColor: "#FFFFFF",
-    padding: 20,
-    borderRadius: 18,
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 15,
-    elevation: 4,
+  },
+
+  smallCard: {
+    backgroundColor: "#FFFFFF",
+    width: "31.5%",
+    paddingVertical: 18,
+    borderRadius: 16,
+    alignItems: "center",
+    elevation: 3,
   },
 
   icon: {
-    fontSize: 30,
-    marginBottom: 10,
-  },
-
-  label: {
-    fontSize: 15,
-    color: "#666666",
+    fontSize: 27,
+    marginBottom: 8,
   },
 
   value: {
-    fontSize: 25,
+    fontSize: 21,
     fontWeight: "bold",
-    marginTop: 5,
+    color: "#172033",
+  },
+
+  label: {
+    fontSize: 12,
+    color: "#777777",
+    marginTop: 4,
   },
 
   progressCard: {
@@ -362,16 +324,22 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
 
+  progressHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
   progressTitle: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "#172033",
   },
 
   progressValue: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: "bold",
-    marginTop: 15,
-    marginBottom: 10,
+    color: "#035efc",
   },
 
   progressBackground: {
@@ -379,22 +347,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#E0E0E0",
     borderRadius: 10,
     overflow: "hidden",
+    marginTop: 18,
   },
 
   progressBar: {
     height: 14,
-    backgroundColor: "#222222",
+    backgroundColor: "#035efc",
     borderRadius: 10,
   },
 
   goal: {
     fontSize: 15,
-    color: "#666666",
+    color: "#555555",
+    fontWeight: "600",
     marginTop: 12,
   },
 
-
-  /* Achievements */
+  goalText: {
+    fontSize: 13,
+    color: "#777777",
+    marginTop: 6,
+  },
 
   achievementHeading: {
     fontSize: 24,
@@ -421,11 +394,11 @@ const styles = StyleSheet.create({
 
   unlockedCard: {
     borderWidth: 2,
-    borderColor: "#222222",
+    borderColor: "#035efc",
   },
 
   lockedCard: {
-    opacity: 0.6,
+    opacity: 0.55,
   },
 
   badge: {
@@ -452,7 +425,7 @@ const styles = StyleSheet.create({
   unlockedText: {
     fontSize: 13,
     fontWeight: "bold",
-    color: "#222222",
+    color: "#16A34A",
     marginTop: 7,
   },
 
@@ -463,8 +436,21 @@ const styles = StyleSheet.create({
     marginTop: 7,
   },
 
+  backButton: {
+    backgroundColor: "#035efc",
+    paddingVertical: 15,
+    borderRadius: 12,
+    marginTop: 5,
+  },
+
+  backText: {
+    color: "#FFFFFF",
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
   bottomSpace: {
     height: 30,
   },
-
 });
