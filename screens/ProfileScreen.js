@@ -68,7 +68,10 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <View style={styles.mainContainer}>
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.profileHeader}>
           <View style={styles.profileCircle}>
             <Text style={styles.profileIcon}>👤</Text>
@@ -79,6 +82,26 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.role}>
             FitLife Member 💪
           </Text>
+
+          <View style={styles.memberBadge}>
+            <Text style={styles.memberBadgeText}>
+              ACTIVE MEMBER
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.welcomeCard}>
+          <View>
+            <Text style={styles.welcomeTitle}>
+              Welcome back, {name}!
+            </Text>
+
+            <Text style={styles.welcomeText}>
+              Keep working towards your fitness goals.
+            </Text>
+          </View>
+
+          <Text style={styles.welcomeIcon}>🔥</Text>
         </View>
 
         <Text style={styles.sectionTitle}>
@@ -87,11 +110,12 @@ export default function ProfileScreen({ navigation }) {
 
         <View style={styles.card}>
           <View style={styles.infoRow}>
-            <Text style={styles.icon}>📧</Text>
+            <View style={styles.iconBox}>
+              <Text style={styles.icon}>📧</Text>
+            </View>
 
-            <View>
+            <View style={styles.infoContent}>
               <Text style={styles.label}>Email</Text>
-
               <Text style={styles.value}>{email}</Text>
             </View>
           </View>
@@ -99,54 +123,107 @@ export default function ProfileScreen({ navigation }) {
           <View style={styles.line} />
 
           <View style={styles.infoRow}>
-            <Text style={styles.icon}>📱</Text>
+            <View style={styles.iconBox}>
+              <Text style={styles.icon}>📱</Text>
+            </View>
 
-            <View>
+            <View style={styles.infoContent}>
               <Text style={styles.label}>Phone</Text>
-
               <Text style={styles.value}>{phone}</Text>
             </View>
           </View>
         </View>
 
+        <Text style={styles.sectionTitle}>
+          Account Settings
+        </Text>
+
         <TouchableOpacity
-          style={styles.editButton}
+          style={styles.actionCard}
           onPress={() => navigation.navigate("EditProfile")}
-          activeOpacity={0.7}
+          activeOpacity={0.8}
         >
-          <Text style={styles.editText}>
-            ✏️ EDIT PROFILE
-          </Text>
+          <View style={styles.actionIconBox}>
+            <Text style={styles.actionIcon}>✏️</Text>
+          </View>
+
+          <View style={styles.actionContent}>
+            <Text style={styles.actionTitle}>
+              Edit Profile
+            </Text>
+
+            <Text style={styles.actionSubtitle}>
+              Update your personal information
+            </Text>
+          </View>
+
+          <Text style={styles.arrow}>›</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.passwordButton}
+          style={styles.actionCard}
           onPress={() => navigation.navigate("ChangePassword")}
-          activeOpacity={0.7}
+          activeOpacity={0.8}
         >
-          <Text style={styles.passwordText}>
-            🔐 CHANGE PASSWORD
-          </Text>
+          <View style={styles.actionIconBox}>
+            <Text style={styles.actionIcon}>🔐</Text>
+          </View>
+
+          <View style={styles.actionContent}>
+            <Text style={styles.actionTitle}>
+              Change Password
+            </Text>
+
+            <Text style={styles.actionSubtitle}>
+              Keep your account secure
+            </Text>
+          </View>
+
+          <Text style={styles.arrow}>›</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.historyButton}
+          style={styles.actionCard}
           onPress={() => navigation.navigate("WorkoutHistory")}
-          activeOpacity={0.7}
+          activeOpacity={0.8}
         >
-          <Text style={styles.historyText}>
-            📜 WORKOUT HISTORY
-          </Text>
+          <View style={styles.actionIconBox}>
+            <Text style={styles.actionIcon}>📜</Text>
+          </View>
+
+          <View style={styles.actionContent}>
+            <Text style={styles.actionTitle}>
+              Workout History
+            </Text>
+
+            <Text style={styles.actionSubtitle}>
+              View your completed workouts
+            </Text>
+          </View>
+
+          <Text style={styles.arrow}>›</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.historyButton}
+          style={styles.actionCard}
           onPress={() => navigation.navigate("MyBookings")}
-          activeOpacity={0.7}
+          activeOpacity={0.8}
         >
-          <Text style={styles.historyText}>
-            📅 MY BOOKINGS
-          </Text>
+          <View style={styles.actionIconBox}>
+            <Text style={styles.actionIcon}>📅</Text>
+          </View>
+
+          <View style={styles.actionContent}>
+            <Text style={styles.actionTitle}>
+              My Bookings
+            </Text>
+
+            <Text style={styles.actionSubtitle}>
+              View your trainer bookings
+            </Text>
+          </View>
+
+          <Text style={styles.arrow}>›</Text>
         </TouchableOpacity>
 
         <Text style={styles.sectionTitle}>
@@ -154,9 +231,11 @@ export default function ProfileScreen({ navigation }) {
         </Text>
 
         <View style={styles.goalCard}>
-          <Text style={styles.goalIcon}>🔥</Text>
+          <View style={styles.goalIconBox}>
+            <Text style={styles.goalIcon}>🔥</Text>
+          </View>
 
-          <View>
+          <View style={styles.goalContent}>
             <Text style={styles.goalTitle}>
               Weight Loss
             </Text>
@@ -164,6 +243,17 @@ export default function ProfileScreen({ navigation }) {
             <Text style={styles.goalText}>
               Keep working towards your goal!
             </Text>
+
+            <View style={styles.goalProgressBackground}>
+              <View
+                style={[
+                  styles.goalProgress,
+                  {
+                    width: `${Math.min(workouts * 20, 100)}%`,
+                  },
+                ]}
+              />
+            </View>
           </View>
         </View>
 
@@ -173,7 +263,9 @@ export default function ProfileScreen({ navigation }) {
 
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
-            <Text style={styles.statIcon}>💪</Text>
+            <View style={styles.statIconBox}>
+              <Text style={styles.statIcon}>💪</Text>
+            </View>
 
             <Text style={styles.statValue}>
               {workouts}
@@ -185,7 +277,9 @@ export default function ProfileScreen({ navigation }) {
           </View>
 
           <View style={styles.statCard}>
-            <Text style={styles.statIcon}>🔥</Text>
+            <View style={styles.statIconBox}>
+              <Text style={styles.statIcon}>🔥</Text>
+            </View>
 
             <Text style={styles.statValue}>
               {calories}
@@ -200,7 +294,7 @@ export default function ProfileScreen({ navigation }) {
         <TouchableOpacity
           style={styles.logoutButton}
           onPress={handleLogout}
-          activeOpacity={0.7}
+          activeOpacity={0.8}
         >
           <Text style={styles.logoutText}>
             🚪 LOGOUT
@@ -259,39 +353,42 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: "#F5F7FA",
+    backgroundColor: "#F5F7FB",
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#F5F7FA",
+    backgroundColor: "#F5F7FB",
   },
 
   profileHeader: {
     backgroundColor: "#172033",
     alignItems: "center",
-    paddingVertical: 35,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    paddingTop: 35,
+    paddingBottom: 30,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
 
   profileCircle: {
-    width: 95,
-    height: 95,
-    borderRadius: 48,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 12,
+    borderWidth: 4,
+    borderColor: "#035efc",
   },
 
   profileIcon: {
-    fontSize: 50,
+    fontSize: 52,
   },
 
   name: {
     color: "#FFFFFF",
-    fontSize: 25,
+    fontSize: 27,
     fontWeight: "bold",
   },
 
@@ -299,6 +396,48 @@ const styles = StyleSheet.create({
     color: "#BFC7D5",
     fontSize: 14,
     marginTop: 5,
+  },
+
+  memberBadge: {
+    backgroundColor: "#035efc",
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 20,
+    marginTop: 12,
+  },
+
+  memberBadgeText: {
+    color: "#FFFFFF",
+    fontSize: 11,
+    fontWeight: "bold",
+  },
+
+  welcomeCard: {
+    backgroundColor: "#FFFFFF",
+    marginHorizontal: 15,
+    marginTop: 18,
+    padding: 18,
+    borderRadius: 18,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    elevation: 3,
+  },
+
+  welcomeTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#172033",
+  },
+
+  welcomeText: {
+    fontSize: 13,
+    color: "#777777",
+    marginTop: 5,
+  },
+
+  welcomeIcon: {
+    fontSize: 35,
   },
 
   sectionTitle: {
@@ -323,9 +462,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
+  iconBox: {
+    width: 45,
+    height: 45,
+    borderRadius: 13,
+    backgroundColor: "#EEF4FF",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 14,
+  },
+
   icon: {
-    fontSize: 25,
-    marginRight: 15,
+    fontSize: 23,
+  },
+
+  infoContent: {
+    flex: 1,
   },
 
   label: {
@@ -346,70 +498,79 @@ const styles = StyleSheet.create({
     marginVertical: 18,
   },
 
-  editButton: {
+  actionCard: {
     backgroundColor: "#FFFFFF",
     marginHorizontal: 15,
-    marginTop: 15,
-    paddingVertical: 14,
-    borderRadius: 14,
+    marginBottom: 10,
+    padding: 16,
+    borderRadius: 16,
+    flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#172033",
+    elevation: 2,
   },
 
-  editText: {
-    color: "#172033",
-    fontSize: 15,
-    fontWeight: "bold",
-  },
-
-  passwordButton: {
-    backgroundColor: "#FFFFFF",
-    marginHorizontal: 15,
-    marginTop: 10,
-    paddingVertical: 14,
+  actionIconBox: {
+    width: 48,
+    height: 48,
     borderRadius: 14,
+    backgroundColor: "#EEF4FF",
+    justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#172033",
+    marginRight: 14,
   },
 
-  passwordText: {
-    color: "#172033",
-    fontSize: 15,
+  actionIcon: {
+    fontSize: 23,
+  },
+
+  actionContent: {
+    flex: 1,
+  },
+
+  actionTitle: {
+    fontSize: 16,
     fontWeight: "bold",
-  },
-
-  historyButton: {
-    backgroundColor: "#FFFFFF",
-    marginHorizontal: 15,
-    marginTop: 10,
-    paddingVertical: 14,
-    borderRadius: 14,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#172033",
-  },
-
-  historyText: {
     color: "#172033",
-    fontSize: 15,
-    fontWeight: "bold",
+  },
+
+  actionSubtitle: {
+    fontSize: 12,
+    color: "#888888",
+    marginTop: 4,
+  },
+
+  arrow: {
+    fontSize: 28,
+    color: "#777777",
+    marginLeft: 8,
   },
 
   goalCard: {
     backgroundColor: "#FFFFFF",
     marginHorizontal: 15,
     borderRadius: 18,
-    padding: 20,
+    padding: 18,
     flexDirection: "row",
     alignItems: "center",
     elevation: 3,
   },
 
-  goalIcon: {
-    fontSize: 35,
+  goalIconBox: {
+    width: 55,
+    height: 55,
+    borderRadius: 17,
+    backgroundColor: "#FFF1E8",
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: 15,
+  },
+
+  goalIcon: {
+    fontSize: 30,
+  },
+
+  goalContent: {
+    flex: 1,
   },
 
   goalTitle: {
@@ -421,6 +582,21 @@ const styles = StyleSheet.create({
   goalText: {
     color: "#777777",
     marginTop: 4,
+    fontSize: 13,
+  },
+
+  goalProgressBackground: {
+    height: 7,
+    backgroundColor: "#E5E7EB",
+    borderRadius: 10,
+    marginTop: 10,
+    overflow: "hidden",
+  },
+
+  goalProgress: {
+    height: 7,
+    backgroundColor: "#035efc",
+    borderRadius: 10,
   },
 
   statsRow: {
@@ -430,7 +606,7 @@ const styles = StyleSheet.create({
   },
 
   statCard: {
-    width: "47%",
+    width: "48%",
     backgroundColor: "#FFFFFF",
     borderRadius: 18,
     paddingVertical: 20,
@@ -438,20 +614,30 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
 
+  statIconBox: {
+    width: 52,
+    height: 52,
+    borderRadius: 16,
+    backgroundColor: "#EEF4FF",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   statIcon: {
-    fontSize: 28,
+    fontSize: 27,
   },
 
   statValue: {
-    fontSize: 25,
+    fontSize: 27,
     fontWeight: "bold",
     color: "#172033",
-    marginTop: 5,
+    marginTop: 8,
   },
 
   statLabel: {
     color: "#777777",
     marginTop: 3,
+    fontSize: 13,
   },
 
   logoutButton: {
@@ -461,6 +647,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 14,
     alignItems: "center",
+    elevation: 2,
   },
 
   logoutText: {
@@ -470,7 +657,7 @@ const styles = StyleSheet.create({
   },
 
   bottomSpace: {
-    height: 30,
+    height: 35,
   },
 
   modalBackground: {
@@ -485,7 +672,7 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 400,
     backgroundColor: "#FFFFFF",
-    borderRadius: 20,
+    borderRadius: 22,
     padding: 30,
     alignItems: "center",
   },
